@@ -1,10 +1,40 @@
 <!doctype html>
 <html>
 <head>
-    <title></title>
+    <title>Berlin Night Photography</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
 </head>
 <body>
+    <header>
+        <h1>BERLIN NIGHT PHOTOGRAPHY</h1>
+        <div class="divider"></div>
+        <h4>LONG EXPOSURE AND LIGHT TRAILS</h4>
+    </header>
+    <main>
+        <div class="image-block" v-for ="imageData in images">
+            <img class="image-on-home" :src="imageData.url" :alt="imageData.description" >
+            <h3>{{imageData.title}}</h3>
+        </div>
+        <div class="image-block" v-for ="imageData in images">
+            <img class="image-on-home" :src="imageData.url" :alt="imageData.description" >
+            <h3>{{imageData.title}}</h3>
+        </div>
+        <div class="image-block" v-for ="imageData in images">
+            <img class="image-on-home" :src="imageData.url" :alt="imageData.description" >
+            <h3>{{imageData.title}}</h3>
+        </div>
+        <div class="image-block" v-for ="imageData in images">
+            <img class="image-on-home" :src="imageData.url" :alt="imageData.description" >
+            <h3>{{imageData.title}}</h3>
+        </div>
+
+    </main>
+    <footer>
+        <p>This is my footer</p>
+    </footer>
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
+    <script src="/js/script.js"></script>
 </body>
 </html>
