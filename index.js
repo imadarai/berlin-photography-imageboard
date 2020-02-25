@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const database = require('./public/js/db.js');
+const s3 = require("./s3.js");
+const config = require("./config.json");
 
 ///////////////////////////////////////////////////////////////////////////////
 //                    FILE UPLOAD BOILERPLATE CODE                           //
@@ -48,17 +50,20 @@ app.get('/getImages', (req, res) => {
 ////////////////////////////////////////////////////////////////////////////////
 //                                 POST ROUTES                                //
 // /////////////////////////////////////////////////////////////////////////////
-app.post('/upload', uploader.single('file'), (req, res) => {
-    console.log("input: ", req.body);
-    console.log("file", req.file);
+app.post('/upload', uploader.single('file'), s3.upload, (req, res) => {
+    // console.log("input: ", req.body);
+    // console.log("file", req.file);
 
     if (req.file) {
-        //make database insert HERE
+        //send file info to database to insert
+        database.insertImage(config.s3Url + req.file.filename, req.body.username, req.body.title, req.body.description)
+            //catch returning data from db
+            .then(function(dataFromDb) {
+                // console.log("data being returned from the database is: ", dataFromDb.rows[0]);
+                //pass data to VUE
+                res.json(dataFromDb.rows[0]);
+            }).catch(err => console.log("Err in insertImage DB Call in index.js : ", err));
 
-        //Once successful database has been inserted - send to VUE below
-        res.json({
-            success: true
-        });
     } else {
         res.json ({
             success: false

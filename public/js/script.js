@@ -17,6 +17,7 @@
             var me = this;
             axios.get('/getImages').then( function (response) {
                 //response.data is where the info lives ...
+                // console.log("response from page is: ", response);
                 me.images = response.data;
             }).catch(err => console.log("Err in /getImages in script.js : ", err));
         }, //Mounted Ends
@@ -29,18 +30,24 @@
                 formData.append('title', this.title);
                 formData.append('description', this.description);
                 formData.append('username', this.username);
-                formData.append('file', this.file); 
+                formData.append('file', this.file);
 
-                axios.post('/upload', formData).then(function(resp){
-                    console.log("resp from POST /upload: ", resp);
+                var me = this;
+
+                axios.post('/upload', formData).then(function(response){
+                    //unshifting to make sure image is the first thing added
+                    me.images.unshift(response.data);
+                    //setting formData to empty
+                    me.formData = { };
+                    // console.log("resp from POST /upload: ", response);
                 }).catch(err => console.log("Err in /upload in axios script.js : ", err));
 
 
             },
             handleChange: function(e) {
                 //this runs when user select an img in the file input field
-                console.log('HandleChange is running!');
-                console.log('File: ', e.target.files[0]);
+                // console.log('HandleChange is running!');
+                // console.log('File: ', e.target.files[0]);
 
                 this.file = e.target.files[0];
                 console.log("THIS for imageUpload Data: ", this);
