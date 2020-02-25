@@ -10,19 +10,33 @@
         <h1>BERLIN NIGHT PHOTOGRAPHY</h1>
         <div class="divider"></div>
         <h4>LONG EXPOSURE AND LIGHT TRAILS</h4>
+        <br>
+        <br>
     </header>
     <main>
-        <div class="image-block" v-for ="imageData in images">
-            <img class="image-on-home" :src="imageData.url" :alt="imageData.description" >
-            <h3>{{imageData.title}}</h3>
-        </div>
-        <div class="image-block" v-for ="imageData in images">
-            <img class="image-on-home" :src="imageData.url" :alt="imageData.description" >
-            <h3>{{imageData.title}}</h3>
-        </div>
-        <div class="image-block" v-for ="imageData in images">
-            <img class="image-on-home" :src="imageData.url" :alt="imageData.description" >
-            <h3>{{imageData.title}}</h3>
+        <div class="form-container">
+            <h2>Upload Image Details</h2>
+            <form>
+                <div class="field">
+                    <label for="title">Title: </label>
+                    <input v-model="title" type="text" name="titile" :placeholder="title">
+                </div>
+                <div class="field">
+                    <label for="description">Description: </label>
+                    <input v-model="description" type="text" name="description" :placeholder="description">
+                </div>
+                <div class="field">
+                    <label for="username">UserName: </label>
+                    <input v-model="username" type="text" name="username" :placeholder="username">
+                </div>
+                <div class="field">
+                    <input @change= "handleChange" type="file" name="file" accept="image/*">
+                </div>
+                <div class="field">
+                    <button @click="handleClick">submit</button>
+                </div>
+            </form>
+            <!-- https://codepen.io/murphyrandle/pen/wvCgI/ -->
         </div>
         <div class="image-block" v-for ="imageData in images">
             <img class="image-on-home" :src="imageData.url" :alt="imageData.description" >
