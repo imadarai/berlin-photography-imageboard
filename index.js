@@ -1,11 +1,11 @@
 const express = require('express');
 const app = express();
-const database = require('./public/js/db.js');
+const database = require('./db.js');
 const s3 = require("./s3.js");
 const config = require("./config.json");
 
 ///////////////////////////////////////////////////////////////////////////////
-//                    FILE UPLOAD BOILERPLATE CODE                           //
+//                FILE UPLOAD BOILERPLATE CODE WITH MULTER                   //
 // /////////////////////////////////////////////////////////////////////////////
 const multer = require('multer');
 const uidSafe = require('uid-safe');
@@ -33,11 +33,13 @@ const uploader = multer({
 // /////////////////////////////////////////////////////////////////////////////
 //This serves all my html, css, js requests
 app.use(express.static('./public'));
+app.use(express.json());
 
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                 GET ROUTES                                 //
 // /////////////////////////////////////////////////////////////////////////////
+// ----------------------------- GET ALL IMAGES ------------------------------//
 app.get('/getImages', (req, res) => {
     //Database call to get Images URL, Title and Description
     database.getImages().then( results => {
@@ -47,9 +49,25 @@ app.get('/getImages', (req, res) => {
         return res.json(imagesData);
     }).catch(err => console.log("Err in getImages() on server side : ", err));
 });
+// --------------------------- GET IMAGE BY ID ------------------------------//
+app.get ("/getImageById/:id", (req, res) => {
+    //Database call to get an Image data by ID
+    database.getImageById(req.params.id).then( imageData => {
+        //returning data object to VUE
+        return res.json(imageData.rows[0]);
+    }).catch(err => console.log("Err in database.getImageById on server side : ", err));
+});
+// --------------------- GET COMMENTS BY IMAGE ID------------------------------//
+app.get("/comments/:id", (req, res) => {
+    database.getAllCommentsByImageId(req.params.id)
+        .then(function(commentData) {
+            return res.json(commentData.rows);
+        }).catch(err => console.log("Err in database.getAllCommentsByImageId on server side : ", err));
+});
 ////////////////////////////////////////////////////////////////////////////////
 //                                 POST ROUTES                                //
 // /////////////////////////////////////////////////////////////////////////////
+// ----------------------------- POST AN IMAGE --------------------------------//
 app.post('/upload', uploader.single('file'), s3.upload, (req, res) => {
     // console.log("input: ", req.body);
     // console.log("file", req.file);
@@ -69,6 +87,14 @@ app.post('/upload', uploader.single('file'), s3.upload, (req, res) => {
             success: false
         });
     }
+});
+// ----------------------------- POST A COMMENT --------------------------------//
+app.post("/addcomment", (req, res) => {
+    console.log(req.body);
+    const {comment, username, image_id} = req.body;
+    database.addComment(comment, username, image_id).then(function(data) {
+        res.json(data.rows[0]);
+    }).catch(err => console.log("Err in /addcomment on server: ", err));
 });
 
 

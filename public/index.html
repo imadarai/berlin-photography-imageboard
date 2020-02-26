@@ -14,23 +14,28 @@
         <br>
     </header>
     <main>
+        <image-modal v-if="idOfImageClicked"
+            :id="idOfImageClicked"
+            @close-modal-message-to-template = "closeModalFuncitonInInstance"
+        ></image-modal>
+
         <div class="form-container">
-            <h2>Upload Image Details</h2>
+            <h2>Image Details</h2>
             <form>
                 <div class="field">
-                    <label for="title">Title: </label>
-                    <input v-model="title" type="text" name="titile" :placeholder="title">
+                    <label class="image-upload" for="title">Title: </label>
+                    <input class="image-upload" v-model="title" type="text" name="titile" :placeholder="title">
                 </div>
                 <div class="field">
-                    <label for="description">Description: </label>
-                    <input v-model="description" type="text" name="description" :placeholder="description">
+                    <label class="image-upload" for="description">Description: </label>
+                    <input class="image-upload" v-model="description" type="text" name="description" :placeholder="description">
                 </div>
                 <div class="field">
-                    <label for="username">UserName: </label>
-                    <input v-model="username" type="text" name="username" :placeholder="username">
+                    <label class="image-upload" for="username">UserName: </label>
+                    <input class="image-upload" v-model="username" type="text" name="username" :placeholder="username">
                 </div>
                 <div class="field">
-                    <input @change= "handleChange" type="file" name="file" accept="image/*">
+                    <input class="image-upload" @change= "handleChange" type="file" name="file" accept="image/*">
                 </div>
                 <div class="field">
                     <button @click="handleClick">submit</button>
@@ -39,14 +44,46 @@
             <!-- https://codepen.io/murphyrandle/pen/wvCgI/ -->
         </div>
         <div class="image-block" v-for ="imageData in images">
-            <img class="image-on-home" :src="imageData.url" :alt="imageData.description" >
+            <img  @click="showModal" class="image-on-home" :src="imageData.url" :alt="imageData.description" :id="imageData.id" >
             <h3>{{imageData.title}}</h3>
         </div>
 
+
     </main>
+    <!-- VUE COMPONENT FOR IMAGE MODAL -->
+    <script id="single-image-component" type="text/x-template">
+
+        <div class="image-modal">
+            <div @click="closeModalRequestToVueComponent" class="close-modal">x</div>
+            <!-- Title, Description, URL, username, created_at, id -->
+            <img class="image-in-image-modal" :src="image.url" :alt="image.description">
+            <h1>{{ image.title }}</h1>
+            <h3>By {{ image.username}}</h3>
+            <p>{{ image.description}}</p>
+            <p>Uploaded at: {{ image.created_at }}</p>
+            <h3>Add a comment:</h3>
+
+            <form>
+                <input v-model="newComment.username" type="text" name="username" placeholder="username">
+                <input v-model="newComment.commentText" type="text" name="commentText" placeholder="Enter your comment here">
+                <button @click="sendComment">submit</button>
+            </form>
+
+            <h3>Comments:</h3>
+            <div class="comments-block" v-for ="commentsData in comments">
+                <p>{{commentsData.username}} : {{commentsData.comment}} - submitted at: {{commentsData.created_at}}</p>
+                <br>
+            </div>
+        </div>
+
+    </script>
+
+
+
     <footer>
         <p>This is my footer</p>
     </footer>
+
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
     <script src="/js/script.js"></script>
