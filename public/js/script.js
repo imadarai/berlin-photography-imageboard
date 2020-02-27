@@ -39,7 +39,7 @@
                 this.$emit('close-modal-message-to-template');
             },
             sendComment: function(e) {
-                console.log(self);
+                var self = this;
                 e.preventDefault();
                 var commentData = {
                     comment: self.newComment.commentText,
@@ -61,10 +61,14 @@
             idOfImageClicked: null,
             images: [],
             //Data Property will store the values of our input fields
-            title: " ",
-            description: " ",
-            username: " ",
-            file: null
+            formData: {
+                title: " ",
+                description: " ",
+                username: " ",
+                file: null,
+            },
+            AreThereMoreImages: true,
+            EndOfImageStream: false,
         },
         //MOUNTED is a good time to go talk to the server
         mounted: function(){
@@ -81,10 +85,10 @@
                 e.preventDefault();
                 //COllecting Form Data and passing to 'this'
                 var formData = new FormData();
-                formData.append('title', this.title);
-                formData.append('description', this.description);
-                formData.append('username', this.username);
-                formData.append('file', this.file);
+                formData.append('title', this.formData.title);
+                formData.append('description', this.formData.description);
+                formData.append('username', this.formData.username);
+                formData.append('file', this.formData.file);
                 //setting self to this to user in AXIOS
                 var self = this;
                 //AXIOS to upload Image to stream
@@ -103,8 +107,23 @@
                 this.idOfImageClicked = null;
             },
             handleChange: function(e) {
-                this.file = e.target.files[0];
-                console.log("THIS for imageUpload Data: ", this);
+                this.formData.file = e.target.files[0];
+            },
+            getMoreImages: function() {
+                var self = this;
+                var idOfLastImage = this.images[this.images.length - 1].id;
+
+                axios.get("/load-more-images/" + idOfLastImage).then(function(response) {
+                    self.images.push.apply(self.images, response.data);
+                    idOfLastImage = self.images[self.images.length - 1].id;
+
+                    if (idOfLastImage == 1) {
+                        self.AreThereMoreImages = false;
+                        self.EndOfImageStream = true;
+                    }
+
+
+                });
             },
         }
     });

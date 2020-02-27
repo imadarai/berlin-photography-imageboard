@@ -64,6 +64,13 @@ app.get("/comments/:id", (req, res) => {
             return res.json(commentData.rows);
         }).catch(err => console.log("Err in database.getAllCommentsByImageId on server side : ", err));
 });
+// --------------------- GET MORE IMAGES ON MORE BUTTON-------------------------//
+app.get("/load-more-images/:id", (req, res) => {
+    let idOfLastImage = req.params.id;
+    database.getMoreImages(idOfLastImage).then(response => {
+        res.json(response.rows);
+    }).catch(err => console.log("Err in database.getMoreImages on server side : ", err));
+});
 ////////////////////////////////////////////////////////////////////////////////
 //                                 POST ROUTES                                //
 // /////////////////////////////////////////////////////////////////////////////

@@ -24,15 +24,15 @@
             <form>
                 <div class="field">
                     <label class="image-upload" for="title">Title: </label>
-                    <input class="image-upload" v-model="title" type="text" name="titile" :placeholder="title">
+                    <input class="image-upload" v-model="formData.title" type="text" name="titile" placeholder="title">
                 </div>
                 <div class="field">
                     <label class="image-upload" for="description">Description: </label>
-                    <input class="image-upload" v-model="description" type="text" name="description" :placeholder="description">
+                    <input class="image-upload" v-model="formData.description" type="text" name="description" placeholder="description">
                 </div>
                 <div class="field">
                     <label class="image-upload" for="username">UserName: </label>
-                    <input class="image-upload" v-model="username" type="text" name="username" :placeholder="username">
+                    <input class="image-upload" v-model="formData.username" type="text" name="username" placeholder="username">
                 </div>
                 <div class="field">
                     <input class="image-upload" @change= "handleChange" type="file" name="file" accept="image/*">
@@ -43,13 +43,18 @@
             </form>
             <!-- https://codepen.io/murphyrandle/pen/wvCgI/ -->
         </div>
+        <button class="reveal-form" type="button" name="reveal-form">Upload Image</button>
+
         <div class="image-block" v-for ="imageData in images">
             <img  @click="showModal" class="image-on-home" :src="imageData.url" :alt="imageData.description" :id="imageData.id" >
             <h3>{{imageData.title}}</h3>
         </div>
-
-
+        <button v-if="AreThereMoreImages" @click="getMoreImages" type="button">More</button>
+        <p v-if="EndOfImageStream">End of Image Stream</p>
     </main>
+
+
+
     <!-- VUE COMPONENT FOR IMAGE MODAL -->
     <script id="single-image-component" type="text/x-template">
 
@@ -65,7 +70,7 @@
 
             <form>
                 <input v-model="newComment.username" type="text" name="username" placeholder="username">
-                <input v-model="newComment.commentText" type="text" name="commentText" placeholder="Enter your comment here">
+                <textarea v-model="newComment.commentText" type="text" name="commentText" placeholder="Enter your comment here"></textarea>
                 <button @click="sendComment">submit</button>
             </form>
 

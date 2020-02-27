@@ -56,6 +56,14 @@ div.image-block {
     margin: 20px;
     padding: 20px;
 }
+div.image-block:hover {
+    background-color:rgba(226, 53, 37);
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    color: white;
+
+}
 
 img.image-on-home {
     width: 300px;
@@ -106,6 +114,7 @@ div.form-container {
     bottom: 0;
     right: 0;
     margin: 10px;
+    margin-bottom: 65px;
     padding-top: 20px;
     width: 350px;
     height: 400px;
@@ -113,8 +122,8 @@ div.form-container {
     -webkit-box-shadow: -82px -68px 300px 94px rgba(226, 53, 37,0.75);
     -moz-box-shadow: -82px -68px 300px 94px rgba(226, 53, 37,0.75);
     box-shadow: -82px -68px 300px 94px rgba(226, 53, 37,0.75);
+    visibility: hidden;
 }
-
 form.image-upload {
     font-size: 16px;
     display: flex;
@@ -141,7 +150,16 @@ input.image-upload {
     /* padding: 7px 0; */
     background: transparent;
 }
-
+button.reveal-form {
+    background-color: yellow;
+    height: 50px;
+    width: 100px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 10px;
+    visibility: hidden;
+}
 /* ---------------------------------------------------------------------------*/
 /* -----------------------FOOTER AND  ITS ELEMENTS----------------------------*/
 /* ---------------------------------------------------------------------------*/

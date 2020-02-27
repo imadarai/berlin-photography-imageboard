@@ -14,7 +14,7 @@ module.exports.getImages = function () {
     return db.query(
         `SELECT * FROM images
         ORDER BY created_at DESC
-        LIMIT 9`,
+        LIMIT 12`,
     );
 };
 ///////////////////////////////////////////////////////////////////////////////
@@ -27,6 +27,20 @@ module.exports.getImageById = function (id) {
         WHERE id = $1
         ORDER BY created_at DESC`,
         [id]
+    );
+};
+///////////////////////////////////////////////////////////////////////////////
+//             DATABASE REQUEST FOR --- GETTING MORE IMAGES                 //
+///////////////////////////////////////////////////////////////////////////////
+
+exports.getMoreImages = function(lastID) {
+    return db.query(
+        `SELECT *
+        FROM images
+        WHERE id < $1
+        ORDER BY id DESC
+        LIMIT 12`,
+        [lastID]
     );
 };
 ///////////////////////////////////////////////////////////////////////////////
