@@ -21,17 +21,14 @@
                 comments: []
             };
         },
+        watch: {
+            id: function () {
+                this.mountFunction();
+            }
+            ///contact the server to reupload new page
+        },
         mounted: function () {
-            var self = this;
-            axios.get('/getImageById/'+ self.id)
-                .then( function (response) {
-                    self.image = response.data;
-                    //request to get comments
-                    axios.get("/comments/" + self.id).then( function (response) {
-                        self.comments = response.data;
-                    }).catch(err => console.log("Err in /comments/ in script.js : ", err));
-
-                }).catch(err => console.log("Err in /getImageById in script.js : ", err));
+            this.mountFunction();
         },
         //METHODS ARE EVENT LISTENERES THAT RESPONSE TO EVENTS LIKE A @CLICK ON HTML SIDE
         methods: {
@@ -51,6 +48,18 @@
                     self.newComment = { };
                 }).catch(err => console.log("Err in post /add-comment in script.js : ", err));
             },
+            mountFunction: function () {
+                var self = this;
+                axios.get('/getImageById/'+ self.id)
+                    .then( function (response) {
+                        self.image = response.data;
+                        //request to get comments
+                        axios.get("/comments/" + self.id).then( function (response) {
+                            self.comments = response.data;
+                        }).catch(err => console.log("Err in /comments/ in script.js : ", err));
+
+                    }).catch(err => console.log("Err in /getImageById in script.js : ", err));
+            },
         }
     });
 
@@ -58,7 +67,7 @@
     new Vue({
         el: "main",
         data: {
-            idOfImageClicked: null,
+            idOfImageClicked: location.hash.slice(1),
             images: [],
             //Data Property will store the values of our input fields
             formData: {
@@ -79,6 +88,10 @@
                 //setting images array in data to response.data
                 self.images = response.data;
             }).catch(err => console.log("Err in /getImages in script.js : ", err));
+
+            addEventListener('hashchange', function() {
+                self.idOfImageClicked= location.hash.slice(1);
+            });
         }, //Mounted Ends
         methods: {
             handleClick: function(e) {
@@ -100,11 +113,10 @@
                     // console.log("resp from POST /upload: ", response);
                 }).catch(err => console.log("Err in /upload in axios script.js : ", err));
             },
-            showModal: function(e) {
-                this.idOfImageClicked = e.target.id;
-            },
             closeModalFuncitonInInstance: function(){
                 this.idOfImageClicked = null;
+                location.hash = "";
+                history.replaceState(null, null, ' ');
             },
             handleChange: function(e) {
                 this.formData.file = e.target.files[0];

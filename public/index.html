@@ -46,7 +46,9 @@
         <button class="reveal-form" type="button" name="reveal-form">Upload Image</button>
 
         <div class="image-block" v-for ="imageData in images">
-            <img  @click="showModal" class="image-on-home" :src="imageData.url" :alt="imageData.description" :id="imageData.id" >
+            <a :href="'#' + imageData.id">
+                <img class="image-on-home" :src="imageData.url" :alt="imageData.description" :id="imageData.id" >
+            </a>
             <h3>{{imageData.title}}</h3>
         </div>
         <button v-if="AreThereMoreImages" @click="getMoreImages" type="button">More</button>
