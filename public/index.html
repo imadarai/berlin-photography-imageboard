@@ -51,8 +51,9 @@
             </a>
             <h3>{{imageData.title}}</h3>
         </div>
-        <button v-if="AreThereMoreImages" @click="getMoreImages" type="button">More</button>
-        <p v-if="EndOfImageStream">End of Image Stream</p>
+        <div class="end-of-stream">
+            <p v-if="EndOfImageStream">End of Image Stream</p>
+        </div>
     </main>
 
 
@@ -62,33 +63,45 @@
 
         <div class="image-modal">
             <div @click="closeModalRequestToVueComponent" class="close-modal">x</div>
-            <!-- Title, Description, URL, username, created_at, id -->
-            <img class="image-in-image-modal" :src="image.url" :alt="image.description">
-            <h1>{{ image.title }}</h1>
-            <h3>By {{ image.username}}</h3>
-            <p>{{ image.description}}</p>
-            <p>Uploaded at: {{ image.created_at }}</p>
-            <h3>Add a comment:</h3>
 
-            <form>
-                <input v-model="newComment.username" type="text" name="username" placeholder="username">
-                <textarea v-model="newComment.commentText" type="text" name="commentText" placeholder="Enter your comment here"></textarea>
-                <button @click="sendComment">submit</button>
-            </form>
+            <div class="image-details">
+                <h1>{{ image.title }}</h1>
+                <h3>By {{ image.username}}</h3>
+                <div class="image-with-buttons">
+                    <div class="previous-photo" @click="previousImage" v-if="prevId" >
+                        <div class="left-arrow"></div>
+                    </div>
+                    <img class="image-in-image-modal" :src="image.url" :alt="image.description">
+                    <div class="next-photo" @click="nextImage" v-if="nextId">
+                        <div class="right-arrow"></div>
+                    </div>
 
-            <h3>Comments:</h3>
-            <div class="comments-block" v-for ="commentsData in comments">
-                <p>{{commentsData.username}} : {{commentsData.comment}} - submitted at: {{commentsData.created_at}}</p>
-                <br>
+                </div>
+                <p>{{ image.description}}</p>
+                <!-- <p>Uploaded at: {{ image.created_at }}</p> -->
+            </div>
+            <div class="comments-container">
+                <div class="add-comment-container">
+                    <h3>Add a comment:</h3>
+                    <form class="comments-form">
+                        <input v-model="newComment.username" type="text" name="username" placeholder="username">
+                        <textarea v-model="newComment.commentText" type="text" name="commentText" placeholder="Enter your comment here"></textarea>
+                        <button @click="sendComment">submit</button>
+                    </form>
+                </div>
+                <div class="view-comment-container">
+                    <h3>Comments:</h3>
+                    <div class="comments-block" v-for ="commentsData in comments">
+                        <p class="each-comment"><span class="username"> {{commentsData.username}}:</span> {{commentsData.comment}}</p>
+                        <br>
+                    </div>
+                </div>
             </div>
         </div>
 
     </script>
-
-
-
     <footer>
-        <p>This is my footer</p>
+
     </footer>
 
     <script src="/js/vue.js"></script>

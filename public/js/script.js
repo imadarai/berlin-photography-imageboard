@@ -18,17 +18,20 @@
                     username: "",
                     commentText: ""
                 },
-                comments: []
+                comments: [],
+                nextId: null,
+                prevId: null
             };
         },
         watch: {
             id: function () {
-                this.mountFunction();
+                var id = this.id;
+                this.mountComponentFunction(id);
             }
-            ///contact the server to reupload new page
         },
         mounted: function () {
-            this.mountFunction();
+            var id = this.id;
+            this.mountComponentFunction(id);
         },
         //METHODS ARE EVENT LISTENERES THAT RESPONSE TO EVENTS LIKE A @CLICK ON HTML SIDE
         methods: {
@@ -48,17 +51,28 @@
                     self.newComment = { };
                 }).catch(err => console.log("Err in post /add-comment in script.js : ", err));
             },
-            mountFunction: function () {
+            mountComponentFunction: function (id) {
                 var self = this;
-                axios.get('/getImageById/'+ self.id)
+                axios.get('/getImageById/'+ id)
                     .then( function (response) {
                         self.image = response.data;
+                        self.nextId = self.image.next_id;
+                        self.prevId = self.image.prev_id;
                         //request to get comments
-                        axios.get("/comments/" + self.id).then( function (response) {
+                        axios.get("/comments/" + id).then( function (response) {
                             self.comments = response.data;
                         }).catch(err => console.log("Err in /comments/ in script.js : ", err));
-
                     }).catch(err => console.log("Err in /getImageById in script.js : ", err));
+            },
+            nextImage: function () {
+                this.mountComponentFunction(this.nextId);
+                // this.$emit('change-hash');
+                location.hash = this.nextId;
+            },
+            previousImage: function () {
+                this.mountComponentFunction(this.prevId);
+                // this.$emit('change-hash');
+                location.hash = this.prevId;
             },
         }
     });
@@ -76,24 +90,27 @@
                 username: " ",
                 file: null,
             },
-            AreThereMoreImages: true,
             EndOfImageStream: false,
         },
         //MOUNTED is a good time to go talk to the server
         mounted: function(){
-            //Setting this to self to use in AXIOS
-            var self = this;
-            //AXIOS request to server to Get all images
-            axios.get('/getImages').then( function (response) {
-                //setting images array in data to response.data
-                self.images = response.data;
-            }).catch(err => console.log("Err in /getImages in script.js : ", err));
-
-            addEventListener('hashchange', function() {
-                self.idOfImageClicked= location.hash.slice(1);
-            });
+            this.mountInstanceFunction();
+            this.scrollCheck();
         }, //Mounted Ends
         methods: {
+            mountInstanceFunction: function() {
+                //Setting this to self to use in AXIOS
+                var self = this;
+                //AXIOS request to server to Get all images
+                axios.get('/getImages').then( function (response) {
+                    //setting images array in data to response.data
+                    self.images = response.data;
+                }).catch(err => console.log("Err in /getImages in script.js : ", err));
+
+                addEventListener('hashchange', function() {
+                    self.idOfImageClicked= location.hash.slice(1);
+                });
+            },
             handleClick: function(e) {
                 e.preventDefault();
                 //COllecting Form Data and passing to 'this'
@@ -128,18 +145,22 @@
                 axios.get("/load-more-images/" + idOfLastImage).then(function(response) {
                     self.images.push.apply(self.images, response.data);
                     idOfLastImage = self.images[self.images.length - 1].id;
-
-                    if (idOfLastImage == 1) {
-                        self.AreThereMoreImages = false;
+                    if (response.data.length == 0) {
                         self.EndOfImageStream = true;
                     }
-
-
                 });
+            },
+            scrollCheck:function () {
+                var self = this;
+                window.onscroll =  function() {
+                    let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= document.documentElement.offsetHeight - 50;
+                    if (bottomOfWindow) {
+                        self.getMoreImages();
+                    } else {
+                        setTimeout( self.scrollCheck, 1000);
+                    }
+                };
             },
         }
     });
-
-
-
 }());

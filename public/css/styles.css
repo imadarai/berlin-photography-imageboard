@@ -33,13 +33,28 @@ h1 {
 h4 {
     text-align: center;
 }
+h3 {
+    text-align: center;
+}
 
 div.divider {
     width: 30%;
     height: 10px;
     background-color: #E23525;
 }
+::-webkit-scrollbar {
+    width: 12px;
+}
 
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
 /* ---------------------------------------------------------------------------*/
 /* ----------------------MAIN BODY AND ITS ELEMENTS---------------------------*/
 /* ---------------------------------------------------------------------------*/
@@ -62,24 +77,27 @@ div.image-block:hover {
     -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
     box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
     color: white;
-
+    transform: scale();
 }
-
 img.image-on-home {
-    width: 300px;
+    width: 400px;
     height: 300px;
     object-fit: cover;
     cursor: pointer;
 }
-
-h3 {
+div.end-of-stream {
     text-align: center;
+    width: 100%;
+    background-color: rgba(226, 53, 37);
+    color: white;
 }
 /* -------------------------IMAGE MODAL STYLING------------------------------*/
 div.image-modal {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-around;
     position: fixed;
+    flex-wrap: wrap;
     top: 0;
     left: 0;
     right: 0;
@@ -99,12 +117,92 @@ div.close-modal {
     cursor: pointer;
     border-radius: 50%;
 }
+/* -------------------------IMAGE DIV INSIDE MODAL------------------------------*/
+div.image-details {
+    display: flex;
+    flex-direction: column;
+}
+div.image-with-buttons {
+    display: flex;
+    flex-direction: row;
+}
 img.image-in-image-modal {
-    width: 300px;
-    height: 300px;
+    width: 500px;
+    height: 500px;
     object-fit: cover;
+    position: relative;
+}
+div.next-photo {
+    height: 500px;
+    cursor: pointer;
+    background-color: rgba(226, 53, 37,0.75);
+    width: 40px;
+    transform: translateX(-40px);
+}
+div.right-arrow {
+    width: 0;
+    height: 0;
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    border-left:40px solid blue;
+    margin-top: 200px;
+}
+div.previous-photo {
+    z-index: 1;
+    height: 500px;
+    cursor: pointer;
+    background-color: rgba(226, 53, 37,0.75);
+    width: 40px;
+    transform: translateX(40px);
+}
+div.left-arrow {
+    width: 0;
+    height: 0;
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    border-right:40px solid blue;
+    margin-top: 200px;
+}
+/* -------------------------COMMENTS IN MODAL STYLING-------------------------*/
+div.comments-container {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+div.add-comment-container {
+    width: 500px;
 }
 
+div.view-comment-container {
+    width: 500px;
+    overflow: auto;
+    height: 600px;
+}
+div.comments-block {
+    padding-top: 20px;
+    border-bottom: 1px solid black;
+}
+span.username {
+    font-weight: bold;
+    padding-right: 10px;
+}
+p.each-comment {
+
+}
+.view-comment-container::-webkit-scrollbar {
+    width: 12px;
+}
+
+.view-comment-container::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+}
+
+.view-comment-container::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
 /* -------------------------UPLOAD FORM STYLING------------------------------*/
 div.form-container {
     display: flex;

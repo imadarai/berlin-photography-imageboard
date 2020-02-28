@@ -22,13 +22,25 @@ module.exports.getImages = function () {
 ///////////////////////////////////////////////////////////////////////////////
 module.exports.getImageById = function (id) {
     return db.query(
-        `SELECT *
+        `SELECT *, (
+            SELECT id FROM images
+            WHERE id > $1
+            LIMIT 1
+        ) AS prev_id,
+        (
+            SELECT id FROM images
+            WHERE id < $1
+            ORDER BY id DESC
+            LIMIT 1
+        ) AS next_id
         FROM images
         WHERE id = $1
         ORDER BY created_at DESC`,
         [id]
     );
 };
+// LAG(id) OVER(ORDER BY id) prev_code,
+// LEAD(id) OVER(ORDER BY id) next_code
 ///////////////////////////////////////////////////////////////////////////////
 //             DATABASE REQUEST FOR --- GETTING MORE IMAGES                 //
 ///////////////////////////////////////////////////////////////////////////////
