@@ -106,6 +106,7 @@
             EndOfImageStream: false,
             revealIconClicked: false,
             imageDeletion: false,
+            isClicked: false,
         },
         //MOUNTED is a good time to go talk to the server
         mounted: function(){
@@ -179,8 +180,10 @@
             revealUploadForm: function() {
                 if (this.revealIconClicked == false) {
                     this.revealIconClicked = true;
+                    this.isClicked = true;
                 } else {
                     this.revealIconClicked = false;
+                    this.isClicked = false;
                 }
             },
             deleteImageCommentsInInstance: function () {
@@ -202,8 +205,4 @@
             }
         }
     });
-    // Vue.transition('fadeIn', {
-    //     enterClass: 'fadeInUp',
-    //     leaveClass: 'fadeOutDown'
-    // });
 }());

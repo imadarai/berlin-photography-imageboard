@@ -96,7 +96,7 @@ module.exports.deleteImage = function(imageId){
     return db.query(
         `DELETE FROM images
         WHERE id = $1`,
-        [imageId]
+        [imageId
     );
 };
 ///////////////////////////////////////////////////////////////////////////////

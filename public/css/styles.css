@@ -321,8 +321,12 @@ img.reveal-form {
     z-index: 1;
     cursor: pointer;
 }
-img.reveal-form:hover {
+/* img.reveal-form:hover {
     transform: rotate(45deg);
+} */
+.rotate {
+    transform: rotate(45deg);
+    /* add keyframes for animation later */
 }
 p.error {
     color: #eb0b0b;

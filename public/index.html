@@ -16,32 +16,36 @@
             @close-modal-message-to-template = "closeModalFuncitonInInstance"
             @delete-image-and-comments = "deleteImageCommentsInInstance"
         ></image-modal>
+        <transition name = "fade"
+        enter-active-class ="animated fadeInUp"
+        leave-active-class="animated fadeOutDown">
+            <div v-if="revealIconClicked" class="form-container">
+                <h2>Image Details</h2>
+                <form>
+                    <div class="field">
+                        <label class="image-upload" for="title">Title: </label>
+                        <input class="image-upload" v-model="formData.title" type="text" name="titile" placeholder="title">
+                    </div>
+                    <div class="field">
+                        <label class="image-upload" for="description">Description: </label>
+                        <input class="image-upload" v-model="formData.description" type="text" name="description" placeholder="description">
+                    </div>
+                    <div class="field">
+                        <label class="image-upload" for="username">UserName: </label>
+                        <input class="image-upload" v-model="formData.username" type="text" name="username" placeholder="username">
+                    </div>
+                    <div class="field">
+                        <input class="image-upload" @change= "handleChange" type="file" name="file" accept="image/*">
+                    </div>
+                    <button @click="handleClick" class="image-submit">SUBMIT</button>
+                    <p class="error">2MB File Limit</p>
 
-        <div v-if="revealIconClicked" class="form-container animated fadeInUp">
-            <h2>Image Details</h2>
-            <form>
-                <div class="field">
-                    <label class="image-upload" for="title">Title: </label>
-                    <input class="image-upload" v-model="formData.title" type="text" name="titile" placeholder="title">
-                </div>
-                <div class="field">
-                    <label class="image-upload" for="description">Description: </label>
-                    <input class="image-upload" v-model="formData.description" type="text" name="description" placeholder="description">
-                </div>
-                <div class="field">
-                    <label class="image-upload" for="username">UserName: </label>
-                    <input class="image-upload" v-model="formData.username" type="text" name="username" placeholder="username">
-                </div>
-                <div class="field">
-                    <input class="image-upload" @change= "handleChange" type="file" name="file" accept="image/*">
-                </div>
-                <button @click="handleClick" class="image-submit">SUBMIT</button>
-                <p class="error">2MB File Limit</p>
+                </form>
+                <!-- https://codepen.io/murphyrandle/pen/wvCgI/ -->
+            </div>
+        </transition>
 
-            </form>
-            <!-- https://codepen.io/murphyrandle/pen/wvCgI/ -->
-        </div>
-        <img  @click= "revealUploadForm" class="reveal-form" src="./images/more_icon.png">
+        <img  :class="{rotate: isClicked}" @click= "revealUploadForm" class="reveal-form" src="./images/more_icon.png">
 
         <div class="image-block animated fadeIn delay-1s" v-for ="imageData in images">
             <a :href="'#' + imageData.id">
