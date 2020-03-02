@@ -103,8 +103,18 @@ app.post("/addcomment", (req, res) => {
         res.json(data.rows[0]);
     }).catch(err => console.log("Err in /addcomment on server: ", err));
 });
+// --------------------- Delete Image and Comments ----------------------------//
+app.post("/delete/:id", (req, res) => {
+    let idOfImageToDelete = req.params.id;
+    database.deleteComments(idOfImageToDelete).then( () => {
+        database.deleteImage(idOfImageToDelete).then( () => {
+            return res.json( {
+                imageDeletion: true,
+            });
+        }).catch(err => console.log("Err in /addcomment on server: ", err));
+    }).catch(err => console.log("Err in database.deleteComments on server side : ", err));
 
-
+});
 
 
 

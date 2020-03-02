@@ -20,7 +20,9 @@
                 },
                 comments: [],
                 nextId: null,
-                prevId: null
+                prevId: null,
+                haveComments: false,
+                haveNoComments: false,
             };
         },
         watch: {
@@ -38,6 +40,9 @@
             closeModalRequestToVueComponent: function() {
                 this.$emit('close-modal-message-to-template');
             },
+            deleteImageComments: function() {
+                this.$emit('delete-image-and-comments');
+            },
             sendComment: function(e) {
                 var self = this;
                 e.preventDefault();
@@ -47,7 +52,7 @@
                     image_id: self.image.id
                 };
                 axios.post("/addcomment", commentData).then(function(response) {
-                    self.comments.push(response.data);
+                    self.comments.unshift(response.data);
                     self.newComment = { };
                 }).catch(err => console.log("Err in post /add-comment in script.js : ", err));
             },
@@ -60,7 +65,15 @@
                         self.prevId = self.image.prev_id;
                         //request to get comments
                         axios.get("/comments/" + id).then( function (response) {
-                            self.comments = response.data;
+                            if (response.data.length == 0) {
+                                self.haveNoComments = true;
+                                self.haveComments = false;
+                                self.comments = [];
+                            } else {
+                                self.haveNoComments = false;
+                                self.haveComments = true;
+                                self.comments = response.data;
+                            }
                         }).catch(err => console.log("Err in /comments/ in script.js : ", err));
                     }).catch(err => console.log("Err in /getImageById in script.js : ", err));
             },
@@ -91,6 +104,8 @@
                 file: null,
             },
             EndOfImageStream: false,
+            revealIconClicked: false,
+            imageDeletion: false,
         },
         //MOUNTED is a good time to go talk to the server
         mounted: function(){
@@ -148,7 +163,7 @@
                     if (response.data.length == 0) {
                         self.EndOfImageStream = true;
                     }
-                });
+                }).catch(err => console.log("Err in /load-more-image in axios script.js : ", err));
             },
             scrollCheck:function () {
                 var self = this;
@@ -161,6 +176,34 @@
                     }
                 };
             },
+            revealUploadForm: function() {
+                if (this.revealIconClicked == false) {
+                    this.revealIconClicked = true;
+                } else {
+                    this.revealIconClicked = false;
+                }
+            },
+            deleteImageCommentsInInstance: function () {
+                var self = this;
+                console.log(self.idOfImageClicked);
+                axios.post("/delete/" + self.idOfImageClicked).then(function() {
+                    if (self.imageDeletion == true) {
+                        console.log("Image delete was successful");
+                        for (var i = 0; i < self.images.length; i++) {
+                            if (self.images[i].id == self.idOfImageClicked) {
+                                self.closeModalFuncitonInInstance();
+                                return self.images.splice(i, 1);
+                            }
+                        }
+                    } else {
+                        console.log("Image delete was NOT successful");
+                    }
+                }).catch(err => console.log("Err in /delete/ in axios script.js : ", err));
+            }
         }
     });
+    // Vue.transition('fadeIn', {
+    //     enterClass: 'fadeInUp',
+    //     leaveClass: 'fadeOutDown'
+    // });
 }());

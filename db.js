@@ -62,7 +62,8 @@ module.exports.getAllCommentsByImageId = function (id) {
     return db.query(
         `SELECT *
         FROM comments
-        WHERE image_id = $1`,
+        WHERE image_id = $1
+        ORDER BY created_at DESC`,
         [id]
     );
 };
@@ -86,5 +87,25 @@ module.exports.insertImage = function (url, username, title, description) {
         VALUES ($1, $2, $3, $4)
         RETURNING id, url, username, title, description`,
         [url, username, title, description]
+    );
+};
+///////////////////////////////////////////////////////////////////////////////
+//               DATABASE REQUEST FOR --- DELETE IMAGE                       //
+///////////////////////////////////////////////////////////////////////////////
+module.exports.deleteImage = function(imageId){
+    return db.query(
+        `DELETE FROM images
+        WHERE id = $1`,
+        [imageId]
+    );
+};
+///////////////////////////////////////////////////////////////////////////////
+//               DATABASE REQUEST FOR --- DELETE Comments                    //
+///////////////////////////////////////////////////////////////////////////////
+module.exports.deleteComments = function(imageId){
+    return db.query(
+        `DELETE FROM comments
+        WHERE image_id = $1`,
+        [imageId]
     );
 };

@@ -4,22 +4,20 @@
     <title>Berlin Night Photography</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 </head>
 <body>
     <header>
-        <h1>BERLIN NIGHT PHOTOGRAPHY</h1>
-        <div class="divider"></div>
-        <h4>LONG EXPOSURE AND LIGHT TRAILS</h4>
-        <br>
-        <br>
+        <img class="logo-header" src="./images/logo_imageboard.png" alt="">
     </header>
     <main>
         <image-modal v-if="idOfImageClicked"
             :id="idOfImageClicked"
             @close-modal-message-to-template = "closeModalFuncitonInInstance"
+            @delete-image-and-comments = "deleteImageCommentsInInstance"
         ></image-modal>
 
-        <div class="form-container">
+        <div v-if="revealIconClicked" class="form-container animated fadeInUp">
             <h2>Image Details</h2>
             <form>
                 <div class="field">
@@ -37,19 +35,23 @@
                 <div class="field">
                     <input class="image-upload" @change= "handleChange" type="file" name="file" accept="image/*">
                 </div>
-                <div class="field">
-                    <button @click="handleClick">submit</button>
-                </div>
+                <button @click="handleClick" class="image-submit">SUBMIT</button>
+                <p class="error">2MB File Limit</p>
+
             </form>
             <!-- https://codepen.io/murphyrandle/pen/wvCgI/ -->
         </div>
-        <button class="reveal-form" type="button" name="reveal-form">Upload Image</button>
+        <img  @click= "revealUploadForm" class="reveal-form" src="./images/more_icon.png">
 
-        <div class="image-block" v-for ="imageData in images">
+        <div class="image-block animated fadeIn delay-1s" v-for ="imageData in images">
             <a :href="'#' + imageData.id">
                 <img class="image-on-home" :src="imageData.url" :alt="imageData.description" :id="imageData.id" >
             </a>
-            <h3>{{imageData.title}}</h3>
+            <div class="image-tile-title">
+                <h3 class="image-title">{{imageData.title}}</h3>
+                <h3 class="image-username">BY {{imageData.username}}</h3>
+            </div>
+
         </div>
         <div class="end-of-stream">
             <p v-if="EndOfImageStream">End of Image Stream</p>
@@ -65,8 +67,8 @@
             <div @click="closeModalRequestToVueComponent" class="close-modal">x</div>
 
             <div class="image-details">
-                <h1>{{ image.title }}</h1>
-                <h3>By {{ image.username}}</h3>
+                <h1 class="title-modal">{{ image.title }}</h1>
+                <h3 class="username-modal">By {{ image.username}}</h3>
                 <div class="image-with-buttons">
                     <div class="previous-photo" @click="previousImage" v-if="prevId" >
                         <div class="left-arrow"></div>
@@ -77,23 +79,24 @@
                     </div>
 
                 </div>
-                <p>{{ image.description}}</p>
+                <p class="description-modal">{{ image.description}}</p>
+                <!-- <button @click="deleteImageComments">DELETE</button> -->
                 <!-- <p>Uploaded at: {{ image.created_at }}</p> -->
             </div>
             <div class="comments-container">
                 <div class="add-comment-container">
-                    <h3>Add a comment:</h3>
+                    <h4>Add a comment:</h4>
                     <form class="comments-form">
-                        <input v-model="newComment.username" type="text" name="username" placeholder="username">
-                        <textarea v-model="newComment.commentText" type="text" name="commentText" placeholder="Enter your comment here"></textarea>
-                        <button @click="sendComment">submit</button>
+                        <input class="username-input" v-model="newComment.username" type="text" name="username" placeholder="  username">
+                        <input class="comment-input" v-model="newComment.commentText" type="text" name="commentText" placeholder="  enter your comment here"></textarea>
                     </form>
+                    <button class="comment-submit" @click="sendComment">SUBMIT</button>
                 </div>
                 <div class="view-comment-container">
-                    <h3>Comments:</h3>
+                    <h4 v-if="haveComments">Comments:</h4>
+                    <h4 v-if="haveNoComments">Be the first to comment!</h4>
                     <div class="comments-block" v-for ="commentsData in comments">
                         <p class="each-comment"><span class="username"> {{commentsData.username}}:</span> {{commentsData.comment}}</p>
-                        <br>
                     </div>
                 </div>
             </div>

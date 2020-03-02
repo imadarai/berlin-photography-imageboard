@@ -18,30 +18,20 @@ header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 30px;
-    padding-bottom: 30px;
+    background-color: #1f1f24;
+}
+img.logo-header {
+    display: block;
+    max-width:430px;
+    max-height:80px;
+    width: auto;
+    height: auto;
 }
 
-h1, h2, h3, h4, p, form, input {
+h1, h2, h3, h4, p, form, input, textarea, button {
 font-family: 'Oswald';
 }
 
-h1 {
-    text-align: center;
-}
-
-h4 {
-    text-align: center;
-}
-h3 {
-    text-align: center;
-}
-
-div.divider {
-    width: 30%;
-    height: 10px;
-    background-color: #E23525;
-}
 ::-webkit-scrollbar {
     width: 12px;
 }
@@ -63,27 +53,35 @@ main {
     flex-direction: row;
     justify-content: center;
     flex-wrap: wrap;
+    background-color: #1f1f24;
 }
 div.image-block {
-    -webkit-box-shadow: 0px 0px 5px 0px rgba(226, 53, 37,0.75);
-    -moz-box-shadow: 0px 0px 5px 0px rgba(226, 53, 37,0.75);
-    box-shadow: 0px 0px 5px 0px rgba(226, 53, 37,0.75);
-    margin: 20px;
-    padding: 20px;
+    height: 30vh;
+    flex-grow: 1;
 }
-div.image-block:hover {
-    background-color:rgba(226, 53, 37);
-    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-    color: white;
-    transform: scale();
+div.image-tile-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    transform: translateY(-50px);
+    color: #1f1f24;
+    /* opacity: 80%; */
+    background-color: white;
+    padding-left: 40px;
+    padding-right: 40px;
+    border-right: 30px solid #E23525;
+    border-left: 30px solid #E23525;
 }
+
 img.image-on-home {
-    width: 400px;
-    height: 300px;
+    max-height: 100%;
+    min-width: 100%;
     object-fit: cover;
-    cursor: pointer;
+    vertical-align: bottom;
+}
+
+h3.image-title {
+    text-transform: uppercase;
 }
 div.end-of-stream {
     text-align: center;
@@ -102,7 +100,8 @@ div.image-modal {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: wheat;
+    background-color: rgba(255, 255, 255,.99);
+    z-index: 2;
 }
 div.close-modal {
     margin: 10px;
@@ -121,21 +120,40 @@ div.close-modal {
 div.image-details {
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
 }
 div.image-with-buttons {
     display: flex;
     flex-direction: row;
 }
-img.image-in-image-modal {
+h1.title-modal {
+    margin-top: 20px;
+    text-transform: uppercase;
+    margin-left: 40px;
+    text-align: center;
+}
+h3.username-modal {
+    text-transform: uppercase;
+    margin-left: 40px;
+    text-align: center;
+}
+p.description-modal {
+    padding: 10px;
+    margin-left: 40px;
     width: 500px;
+}
+img.image-in-image-modal {
+    margin-top: 20px;
+    width: 80vh;
     height: 500px;
     object-fit: cover;
     position: relative;
 }
 div.next-photo {
+    margin-top: 20px;
     height: 500px;
     cursor: pointer;
-    background-color: rgba(226, 53, 37,0.75);
+    background-color: rgba(255, 255, 255,.10);
     width: 40px;
     transform: translateX(-40px);
 }
@@ -144,14 +162,15 @@ div.right-arrow {
     height: 0;
     border-top: 40px solid transparent;
     border-bottom: 40px solid transparent;
-    border-left:40px solid blue;
+    border-left:40px solid #E23525;
     margin-top: 200px;
 }
 div.previous-photo {
+    margin-top: 20px;
     z-index: 1;
     height: 500px;
     cursor: pointer;
-    background-color: rgba(226, 53, 37,0.75);
+    background-color: rgba(255, 255, 255,.10);
     width: 40px;
     transform: translateX(40px);
 }
@@ -160,7 +179,7 @@ div.left-arrow {
     height: 0;
     border-top: 40px solid transparent;
     border-bottom: 40px solid transparent;
-    border-right:40px solid blue;
+    border-right:40px solid #E23525;
     margin-top: 200px;
 }
 /* -------------------------COMMENTS IN MODAL STYLING-------------------------*/
@@ -171,6 +190,7 @@ div.comments-container {
     align-items: flex-start;
 }
 div.add-comment-container {
+    margin-top: 20px;
     width: 500px;
 }
 
@@ -180,15 +200,51 @@ div.view-comment-container {
     height: 600px;
 }
 div.comments-block {
-    padding-top: 20px;
-    border-bottom: 1px solid black;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 span.username {
     font-weight: bold;
-    padding-right: 10px;
+    padding-right: 5px;
+    text-transform: uppercase;
 }
 p.each-comment {
-
+    border-bottom: 1px dotted red;
+}
+form.comments-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+input.username-input {
+    font-size: 16px;
+    width: 150px;
+    border: 0;
+    border-bottom: 2px solid #eb0b0b;
+    border-right: 2px solid #eb0b0b;
+    outline: 0;
+    color: $white;
+    padding: 7px 0;
+    background: transparent;
+    margin-right: 5px;
+}
+input.comment-input {
+    font-size: 16px;
+    width: 346px;
+    border: 0;
+    border-bottom: 2px solid #eb0b0b;
+    border-left: 2px solid #eb0b0b;
+    outline: 0;
+    color: $white;
+    padding: 7px 0;
+    background: transparent;
+}
+button.comment-submit {
+    background-color:#eb0b0b;
+    color: white;
+    float: right;
+    margin-top: 5px;
+    margin-right: 1px;
 }
 .view-comment-container::-webkit-scrollbar {
     width: 12px;
@@ -220,7 +276,9 @@ div.form-container {
     -webkit-box-shadow: -82px -68px 300px 94px rgba(226, 53, 37,0.75);
     -moz-box-shadow: -82px -68px 300px 94px rgba(226, 53, 37,0.75);
     box-shadow: -82px -68px 300px 94px rgba(226, 53, 37,0.75);
-    visibility: hidden;
+    z-index: 1;
+    border-radius: 12px;
+    /* visibility: hidden; */
 }
 form.image-upload {
     font-size: 16px;
@@ -228,7 +286,12 @@ form.image-upload {
     flex-direction: column;
     width: 300px;
 }
-
+button.image-submit {
+    background-color:#eb0b0b;
+    color: white;
+    float: right;
+    margin-top: 5px;
+}
 div.field {
     display: flex;
     flex-direction: row;
@@ -248,16 +311,24 @@ input.image-upload {
     /* padding: 7px 0; */
     background: transparent;
 }
-button.reveal-form {
-    background-color: yellow;
+img.reveal-form {
     height: 50px;
-    width: 100px;
+    width: 50px;
     position: fixed;
     bottom: 0;
-    right: 0;
+    right: 140px;
     margin: 10px;
-    visibility: hidden;
+    z-index: 1;
+    cursor: pointer;
 }
+img.reveal-form:hover {
+    transform: rotate(45deg);
+}
+p.error {
+    color: #eb0b0b;
+    font-size: 12px;
+}
+
 /* ---------------------------------------------------------------------------*/
 /* -----------------------FOOTER AND  ITS ELEMENTS----------------------------*/
 /* ---------------------------------------------------------------------------*/
